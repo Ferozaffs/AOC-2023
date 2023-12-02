@@ -25,7 +25,7 @@ func init() {
 }
 
 func Run2() {
-	dat, _ := os.ReadFile("inputs/day1_1_data.txt")
+	dat, _ := os.ReadFile("inputs/day1_data.txt")
 	ans := Solve2(string(dat))
 
 	fmt.Printf("ANSWER: %d\n", ans)
