@@ -15,8 +15,8 @@ import (
 
 var day2_2Cmd = &cobra.Command{
 	Use:   "day2_2",
-	Short: "",
-	Long:  ``,
+	Short: "Day 2, challange 2",
+	Long:  `Instead of valid games, find minium needed cubes for each game`,
 	Run: func(cmd *cobra.Command, args []string) {
 		Run2()
 	},
