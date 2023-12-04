@@ -39,21 +39,20 @@ func Solve1(data string) int {
 
 	scanner := bufio.NewScanner(strings.NewReader(data))
 	for scanner.Scan() {
-		s := scanner.Text()
-		index := regexp.MustCompile(`\|`).FindStringIndex(s)
+
+		s := strings.Split(scanner.Text(), ":") //Split card
+		s = strings.Split(s[1], "|")            // Split numbers
 
 		winningNumbers := []int{}
-		matches := 0
-		for i, m := range regexp.MustCompile(`\d+`).FindAllStringIndex(s, -1) {
-			//Skip card ID
-			if i == 0 {
-				continue
-			}
+		for _, m := range regexp.MustCompile(`\d+`).FindAllStringIndex(s[0], -1) {
+			n, _ := strconv.Atoi(s[0][m[0]:m[1]])
+			winningNumbers = append(winningNumbers, n)
+		}
 
-			n, _ := strconv.Atoi(s[m[0]:m[1]])
-			if m[0] < index[0] {
-				winningNumbers = append(winningNumbers, n)
-			} else if slices.Contains(winningNumbers, n) {
+		matches := 0
+		for _, m := range regexp.MustCompile(`\d+`).FindAllStringIndex(s[1], -1) {
+			n, _ := strconv.Atoi(s[1][m[0]:m[1]])
+			if slices.Contains(winningNumbers, n) {
 				matches++
 			}
 		}

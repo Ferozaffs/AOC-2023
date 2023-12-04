@@ -36,37 +36,37 @@ func Run2() {
 func Solve2(data string) int {
 	sum := 0
 
-	lines := []string{}
+	i := 0
+	played := map[int]int{}
 	scanner := bufio.NewScanner(strings.NewReader(data))
 	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
+		played[i] += 1
 
-	for i := 0; i < len(lines); i++ {
-		index := regexp.MustCompile(`\|`).FindStringIndex(lines[i])
+		s := strings.Split(scanner.Text(), ":") //Split card
+		s = strings.Split(s[1], "|")            // Split numbers
 
 		winningNumbers := []int{}
-		matches := 0
-		card := 0
-		for j, m := range regexp.MustCompile(`\d+`).FindAllStringIndex(lines[i], -1) {
-			//Skip card ID
-			if j == 0 {
-				card, _ = strconv.Atoi(lines[i][m[0]:m[1]])
-				continue
-			}
+		for _, m := range regexp.MustCompile(`\d+`).FindAllStringIndex(s[0], -1) {
+			n, _ := strconv.Atoi(s[0][m[0]:m[1]])
+			winningNumbers = append(winningNumbers, n)
+		}
 
-			n, _ := strconv.Atoi(lines[i][m[0]:m[1]])
-			if m[0] < index[0] {
-				winningNumbers = append(winningNumbers, n)
-			} else if slices.Contains(winningNumbers, n) {
+		matches := 0
+		for _, m := range regexp.MustCompile(`\d+`).FindAllStringIndex(s[1], -1) {
+			n, _ := strconv.Atoi(s[1][m[0]:m[1]])
+			if slices.Contains(winningNumbers, n) {
 				matches++
 			}
 		}
 		for j := 0; j < matches; j++ {
-			lines = append(lines, lines[card+j])
+			played[i+j+1] += 1 * played[i]
 		}
-		sum++
+
+		i++
 	}
 
+	for _, n := range played {
+		sum += n
+	}
 	return sum
 }
