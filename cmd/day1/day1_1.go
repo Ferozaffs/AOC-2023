@@ -14,10 +14,8 @@ import (
 
 var day1_1Cmd = &cobra.Command{
 	Use:   "day1_1",
-	Short: "Day 1, challange 1",
-	Long: `Day 1, challange 1:
-	Take first and last digit of string and make a two digit number.
-	Sum all numbers.`,
+	Short: "Day 1, challenge 1",
+	Long:  `Day 1, challenge 1`,
 	Run: func(cmd *cobra.Command, args []string) {
 		Run1()
 	},

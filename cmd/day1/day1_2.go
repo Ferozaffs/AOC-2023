@@ -13,8 +13,8 @@ import (
 
 var day1_2Cmd = &cobra.Command{
 	Use:   "day1_2",
-	Short: "Day 2, challange 2",
-	Long:  `Challange 1 with addition that numbers can appear as words`,
+	Short: "Day 1, challenge 2",
+	Long:  `Day 1, challenge 2`,
 	Run: func(cmd *cobra.Command, args []string) {
 		Run2()
 	},

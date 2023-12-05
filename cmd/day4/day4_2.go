@@ -15,8 +15,8 @@ import (
 
 var day4_2Cmd = &cobra.Command{
 	Use:   "day4_2",
-	Short: "",
-	Long:  ``,
+	Short: "Day 4, challenge 2",
+	Long:  `Day 4, challenge 2`,
 	Run: func(cmd *cobra.Command, args []string) {
 		Run2()
 	},
