@@ -8,7 +8,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -39,23 +38,18 @@ func Solve(data string, multiplier int) int {
 	reIndex := regexp.MustCompile("\\d+")
 
 	scanner := bufio.NewScanner(strings.NewReader(data))
-	row := 0
 	for scanner.Scan() {
-		fmt.Printf("Current row/sum: %d  |  %d\n", row, sum)
-		row++
 
-		neededSlots := 0
 		index := []int{}
 
 		indexScanned := reIndex.FindAllString(scanner.Text(), -1)
 		for _, i := range indexScanned {
 			n, _ := strconv.Atoi(i)
 			index = append(index, n)
-			neededSlots += n
 		}
 
 		split := strings.Fields(scanner.Text())
-		springs := split[0]
+		springs := split[0] + "?"
 
 		if multiplier > 1 {
 			orgIndex := index
@@ -64,26 +58,13 @@ func Solve(data string, multiplier int) int {
 			for i := 0; i < multiplier-1; i++ {
 				for _, idx := range orgIndex {
 					index = append(index, idx)
-					neededSlots += idx
 				}
 
-				springs += "?" + orgSprings
+				springs += orgSprings
 			}
 		}
 
-		slots := 0
-		for i := 0; i < len(springs); i++ {
-			if springs[i] == '#' || springs[i] == '?' {
-				slots++
-			}
-		}
-
-		s := time.Now()
-
-		result := Count(0, slots, neededSlots, []byte(springs), index)
-
-		fmt.Print(time.Since(s))
-		fmt.Print("\n")
+		result := Count(springs, index)
 
 		sum += result
 	}
@@ -91,58 +72,29 @@ func Solve(data string, multiplier int) int {
 	return sum
 }
 
-func Count(start int, slots int, neededSlots int, springs []byte, index []int) int {
-	sum := 0
+var cache = map[string]int{}
 
-	//Pre check
-	if slots < neededSlots {
+func Count(s string, i []int) (sum int) {
+	if sum, ok := cache[fmt.Sprint(s, i)]; ok {
 		return sum
 	}
+	defer func() { recover(); cache[fmt.Sprint(s, i)] = sum }()
 
-	//Expand "?"
-	for i := start; i < len(springs); i++ {
-		if springs[i] == '?' {
-			springs[i] = '.'
-			sum += Count(i+1, slots-1, neededSlots, springs, index)
-
-			springs[i] = '#'
-			sum += Count(i+1, slots, neededSlots, springs, index)
-
-			springs[i] = '?'
-			return sum
+	if len(s) == 0 {
+		if len(i) == 0 {
+			return 1
 		}
+		return 0
 	}
 
-	//Else check if valid
-	if Check(springs, index) == true {
-		sum++
+	if s[0] == '?' || s[0] == '.' {
+		sum += Count(s[1:], i)
+	}
+	if (s[0] == '?' || s[0] == '#') &&
+		s[i[0]] != '#' &&
+		strings.Contains(s[:i[0]], ".") == false {
+		sum += Count(s[i[0]+1:], i[1:])
 	}
 
-	return sum
-}
-
-func Check(springs []byte, index []int) bool {
-	idx := 0
-	for i := 0; i < len(springs); i++ {
-		if springs[i] == '#' {
-			start := i
-			for ; i < len(springs); i++ {
-				if springs[i] == '.' {
-					break
-				}
-			}
-
-			if idx < len(index) || index[idx] != i-start {
-				return false
-			} else {
-				idx++
-			}
-		}
-	}
-
-	if len(index) == idx {
-		return true
-	}
-
-	return false
+	return
 }
