@@ -8,7 +8,7 @@
             "mode": "debug",
             "program": "${workspaceRoot}",
             "env": {},
-            "args": ["day18_1"],
+            "args": ["day20_2"],
         }
     ]
 }

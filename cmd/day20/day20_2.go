@@ -2,6 +2,8 @@ package day20
 
 import (
 	"aoc2023/cmd"
+	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -20,8 +22,8 @@ func init() {
 }
 
 func Run2() {
-}
+	dat, _ := os.ReadFile("inputs/day20_data.txt")
+	Solve1(string(dat), true)
 
-func Solve2() {
-
+	fmt.Printf("ANSWER: %d\n", pressToRX)
 }
