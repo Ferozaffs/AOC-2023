@@ -2,14 +2,16 @@ package day21
 
 import (
 	"aoc2023/cmd"
+	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
 
 var day21_2Cmd = &cobra.Command{
 	Use:   "day21_2",
-	Short: "",
-	Long:  ``,
+	Short: "Day 21, challenge 2",
+	Long:  `Day 21, challenge 2`,
 	Run: func(cmd *cobra.Command, args []string) {
 		Run2()
 	},
@@ -20,8 +22,8 @@ func init() {
 }
 
 func Run2() {
-}
+	dat, _ := os.ReadFile("inputs/day21_data.txt")
+	ans := Solve1(string(dat), 26501365, true)
 
-func Solve2() {
-
+	fmt.Printf("ANSWER: %d\n", ans)
 }
